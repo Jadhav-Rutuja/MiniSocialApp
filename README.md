@@ -78,7 +78,7 @@ project-root
 
 ### 1. Clone the repository
 ```
-git clone (https://github.com/Jadhav-Rutuja/MiniSocialApp.git)
+gh repo clone Jadhav-Rutuja/MiniSocialApp
 cd MiniSocialApp
 ```
 
