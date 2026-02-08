@@ -51,7 +51,6 @@ const Register = () => {
         backgroundImage: "url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdBUu1CMmdsm_f5MDj6AyyTZhq4mPK98_SiA&s')",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
         backgroundAttachment: "fixed",
         backgroundColor: "#f0f0f0",
         fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
@@ -193,3 +192,4 @@ const Register = () => {
 };
 
 export default Register;
+
