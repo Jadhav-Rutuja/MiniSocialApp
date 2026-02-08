@@ -75,7 +75,7 @@ const Header = ({ username, profilePhoto, onProfileClick }) => {
         >
           {profilePhoto ? (
             <img
-              src={profilePhoto}
+              src={profilePhoto || silhouetteDataUri}
               alt="Profile"
               style={{
                 borderRadius: "50%",
@@ -125,3 +125,4 @@ const Header = ({ username, profilePhoto, onProfileClick }) => {
 };
 
 export default Header;
+
