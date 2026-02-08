@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import API from "../services/api";
 import Header from "../components/Header";
 import ProfilePage from "../components/ProfilePage";
@@ -37,7 +37,7 @@ const SocialPage = () => {
     return colors[Math.abs(hash) % colors.length];
   };
 
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
     try {
       const res = await API.get("/auth/me", {
         headers: { Authorization: token }
@@ -46,9 +46,9 @@ const SocialPage = () => {
     } catch (err) {
       console.log("Failed to fetch user");
     }
-  };
+  }, [token]);
 
-  const fetchPosts = async (pageNum = 1) => {
+  const fetchPosts = useCallback(async (pageNum = 1) => {
     try {
       const res = await API.get(`/posts?page=${pageNum}`, {
         headers: { Authorization: token }
@@ -59,13 +59,12 @@ const SocialPage = () => {
     } catch (err) {
       console.log("Failed to fetch posts");
     }
-  };
+  }, [token]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchUser();
     fetchPosts();
-  }, []);
+  }, [fetchUser, fetchPosts]);
 
   useEffect(() => {
     if (user) {
@@ -106,7 +105,7 @@ const SocialPage = () => {
       await API.put(`/users/follow/${userId}`, {}, {
         headers: { Authorization: token }
       });
-      fetchPosts(); // refresh follow state
+      fetchPosts();
     } catch {
       console.log("Follow/unfollow failed");
     }
@@ -133,9 +132,15 @@ const SocialPage = () => {
     postHeader: { display: "flex", justifyContent: "space-between", padding: "12px 16px", borderBottom: "1px solid #e5e7eb" },
     userInfo: { display: "flex", alignItems: "center", gap: 10 },
     userAvatar: (color) => ({
-      width: 40, height: 40, borderRadius: "50%", display: "flex",
-      alignItems: "center", justifyContent: "center",
-      backgroundColor: color, color: "white", fontWeight: 600
+      width: 40,
+      height: 40,
+      borderRadius: "50%",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: color,
+      color: "white",
+      fontWeight: 600
     }),
     postContent: { padding: "12px 16px" },
     postImage: { width: "100%", height: 250, objectFit: "cover", borderRadius: 8 },
@@ -224,7 +229,10 @@ const SocialPage = () => {
         ))}
       </div>
 
-      <button onClick={loadMorePosts} style={{ ...styles.commentBtn, display: "block", margin: "20px auto" }}>
+      <button
+        onClick={loadMorePosts}
+        style={{ ...styles.commentBtn, display: "block", margin: "20px auto" }}
+      >
         Load More Posts
       </button>
 
