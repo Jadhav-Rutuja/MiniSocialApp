@@ -16,7 +16,7 @@ const SocialPage = () => {
   const [userPostsState, setUserPostsState] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [following, setFollowing] = useState(false);
-  const [notifications, setNotifications] = useState([]);
+  // const [notifications, setNotifications] = useState([]);
   const [page, setPage] = useState(1);
 
   const token = localStorage.getItem("token");
@@ -303,3 +303,4 @@ const SocialPage = () => {
 };
 
 export default SocialPage;
+
