@@ -68,9 +68,9 @@ const SocialPage = () => {
   };
 
   useEffect(() => {
-    fetchUser();
-    fetchPosts();
-  }, []);
+  fetchUser();
+  fetchPosts();
+}, [fetchUser, fetchPosts]);
 
   useEffect(() => {
     if (user) {
@@ -78,21 +78,21 @@ const SocialPage = () => {
     }
   }, [posts, user]);
 
-  const handlePost = async () => {
-    if (!text && !imageURL) {
-      setError("Please add text or image");
-      return;
-    }
-    try {
-      await API.post("/posts", { text, imageURL }, { headers: { Authorization: token } });
-      setText("");
-      setImageURL("");
-      setError("");
-      fetchPosts();
-    } catch (err) {
-      setError("Failed to create post");
-    }
-  };
+  // const handlePost = async () => {
+  //   if (!text && !imageURL) {
+  //     setError("Please add text or image");
+  //     return;
+  //   }
+  //   try {
+  //     await API.post("/posts", { text, imageURL }, { headers: { Authorization: token } });
+  //     setText("");
+  //     setImageURL("");
+  //     setError("");
+  //     fetchPosts();
+  //   } catch (err) {
+  //     setError("Failed to create post");
+  //   }
+  // };
 
   const handleLike = async (postId) => {
     try {
@@ -303,4 +303,5 @@ const SocialPage = () => {
 };
 
 export default SocialPage;
+
 
