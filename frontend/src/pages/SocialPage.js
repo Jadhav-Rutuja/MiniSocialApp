@@ -17,6 +17,15 @@ const SocialPage = () => {
 
   const token = localStorage.getItem("token");
 
+  // Responsive detection
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const getAvatarInitials = (username = "User") =>
     username
       .split(" ")
@@ -43,7 +52,7 @@ const SocialPage = () => {
         headers: { Authorization: token }
       });
       setUser(res.data);
-    } catch (err) {
+    } catch {
       console.log("Failed to fetch user");
     }
   }, [token]);
@@ -56,7 +65,7 @@ const SocialPage = () => {
 
       if (pageNum === 1) setPosts(res.data);
       else setPosts((prev) => [...prev, ...res.data]);
-    } catch (err) {
+    } catch {
       console.log("Failed to fetch posts");
     }
   }, [token]);
@@ -126,11 +135,42 @@ const SocialPage = () => {
   if (!user) return null;
 
   const styles = {
-    container: { minHeight: "100vh", backgroundColor: "#f0f2f5", paddingBottom: 40 },
-    feedWrapper: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20, maxWidth: 1200, margin: "20px auto", padding: "0 20px" },
-    postCard: { background: "white", borderRadius: 8, boxShadow: "0 1px 2px rgba(0,0,0,0.1)" },
-    postHeader: { display: "flex", justifyContent: "space-between", padding: "12px 16px", borderBottom: "1px solid #e5e7eb" },
-    userInfo: { display: "flex", alignItems: "center", gap: 10 },
+    container: {
+      minHeight: "100vh",
+      backgroundColor: "#f0f2f5",
+      paddingBottom: 40
+    },
+
+    feedWrapper: {
+      display: "grid",
+      gridTemplateColumns: isMobile
+        ? "1fr"
+        : "repeat(auto-fit, minmax(320px, 1fr))",
+      gap: 20,
+      maxWidth: 1200,
+      margin: "20px auto",
+      padding: isMobile ? "0 10px" : "0 20px"
+    },
+
+    postCard: {
+      background: "white",
+      borderRadius: 8,
+      boxShadow: "0 1px 2px rgba(0,0,0,0.1)"
+    },
+
+    postHeader: {
+      display: "flex",
+      justifyContent: "space-between",
+      padding: isMobile ? "10px" : "12px 16px",
+      borderBottom: "1px solid #e5e7eb"
+    },
+
+    userInfo: {
+      display: "flex",
+      alignItems: "center",
+      gap: 10
+    },
+
     userAvatar: (color) => ({
       width: 40,
       height: 40,
@@ -142,13 +182,58 @@ const SocialPage = () => {
       color: "white",
       fontWeight: 600
     }),
-    postContent: { padding: "12px 16px" },
-    postImage: { width: "100%", height: 250, objectFit: "cover", borderRadius: 8 },
-    postActions: { display: "flex", gap: 10, padding: "8px 16px" },
-    actionBtn: { border: "none", background: "none", cursor: "pointer" },
-    commentWrapper: { display: "flex", gap: 8, marginTop: 8 },
-    commentInput: { flex: 1, border: "1px solid #ccc", borderRadius: 20, padding: "8px 12px" },
-    commentBtn: { padding: "8px 12px", borderRadius: 20, backgroundColor: "#1877f2", color: "white", border: "none", cursor: "pointer" },
+
+    postContent: {
+      padding: isMobile ? "10px" : "12px 16px"
+    },
+
+    postImage: {
+      width: "100%",
+      maxHeight: isMobile ? 200 : 250,
+      objectFit: "cover",
+      borderRadius: 8
+    },
+
+    postActions: {
+      display: "flex",
+      gap: 10,
+      padding: "8px 16px"
+    },
+
+    actionBtn: {
+      border: "none",
+      background: "none",
+      cursor: "pointer"
+    },
+
+    commentWrapper: {
+      display: "flex",
+      gap: 8,
+      marginTop: 8
+    },
+
+    commentInput: {
+      flex: 1,
+      border: "1px solid #ccc",
+      borderRadius: 20,
+      padding: "8px 12px"
+    },
+
+    commentBtn: {
+      padding: "8px 12px",
+      borderRadius: 20,
+      backgroundColor: "#1877f2",
+      color: "white",
+      border: "none",
+      cursor: "pointer"
+    },
+
+    searchBox: {
+      width: isMobile ? "95%" : "90%",
+      margin: "10px auto",
+      display: "block",
+      padding: 8
+    }
   };
 
   return (
@@ -164,7 +249,7 @@ const SocialPage = () => {
         placeholder="Search users/posts..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        style={{ width: "90%", margin: "10px auto", display: "block", padding: 8 }}
+        style={styles.searchBox}
       />
 
       <div style={styles.feedWrapper}>
@@ -173,7 +258,11 @@ const SocialPage = () => {
             <div style={styles.postHeader}>
               <div style={styles.userInfo}>
                 {post.userId?.profilePhoto ? (
-                  <img src={post.userId.profilePhoto} alt="" style={{ width: 40, height: 40, borderRadius: "50%" }} />
+                  <img
+                    src={post.userId.profilePhoto}
+                    alt=""
+                    style={{ width: 40, height: 40, borderRadius: "50%" }}
+                  />
                 ) : (
                   <div style={styles.userAvatar(getAvatarColor(post.userId?.username))}>
                     {getAvatarInitials(post.userId?.username)}
@@ -194,11 +283,16 @@ const SocialPage = () => {
 
             <div style={styles.postContent}>
               {post.text && <p>{post.text}</p>}
-              {post.imageURL && <img src={post.imageURL} alt="" style={styles.postImage} />}
+              {post.imageURL && (
+                <img src={post.imageURL} alt="" style={styles.postImage} />
+              )}
             </div>
 
             <div style={styles.postActions}>
-              <button style={styles.actionBtn} onClick={() => handleLike(post._id)}>
+              <button
+                style={styles.actionBtn}
+                onClick={() => handleLike(post._id)}
+              >
                 👍 Like ({post.likes?.length || 0})
               </button>
             </div>
@@ -220,7 +314,10 @@ const SocialPage = () => {
                   }
                   style={styles.commentInput}
                 />
-                <button onClick={() => handleComment(post._id)} style={styles.commentBtn}>
+                <button
+                  onClick={() => handleComment(post._id)}
+                  style={styles.commentBtn}
+                >
                   Post
                 </button>
               </div>
