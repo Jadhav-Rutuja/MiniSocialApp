@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "https://minisocialapp-4prn.onrender.com" });
+const API = axios.create({ baseURL: "https://minisocialapp-4prn.onrender.com/api" });
 
 // --- Auth ---
 export const registerUser = (userData) => API.post("/auth/register", userData);
@@ -26,6 +26,7 @@ export const unfollowUser = (userId, token) => API.put(`/users/unfollow/${userId
 export const getNotifications = (token) => API.get("/notifications", { headers: { Authorization: token } });
 
 export default API;
+
 
 
 
