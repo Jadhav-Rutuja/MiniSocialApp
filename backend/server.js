@@ -12,7 +12,7 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: "https://minisocialapp-4prn.onrender.com/api",
+    origin: "https://mini-social-app-l7xx.vercel.app",
     credentials: true,
   })
 );
@@ -32,5 +32,6 @@ mongoose.connect(process.env.MONGO_URI)
     );
   })
   .catch(err => console.log(err));
+
 
 
