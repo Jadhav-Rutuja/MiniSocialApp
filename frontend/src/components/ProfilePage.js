@@ -57,10 +57,10 @@ const ProfilePage = ({
     return `data:image/svg+xml,${encodeURIComponent(svg)}`;
   };
 
-  useEffect(() => {
-    fetchMyPosts();
-    checkFollowing();
-  }, []);
+ useEffect(() => {
+  checkFollowing();
+  fetchMyPosts();
+}, [checkFollowing, fetchMyPosts]);
 
   // Fetch posts for profile
   const fetchMyPosts = async () => {
@@ -193,3 +193,4 @@ const ProfilePage = ({
 };
 
 export default ProfilePage;
+
