@@ -23,22 +23,22 @@ const Header = ({ username, profilePhoto, onProfileClick }) => {
   };
 
   // ✅ Silhouette fallback (optional, keeps your current logic)
-  const silhouetteDataUri = (size = 35) => {
-    const bg = "#ececec";
-    const fg = "#999";
-    const headR = Math.round(size * 0.28);
-    const headCx = Math.round(size / 2);
-    const headCy = Math.round(size * 0.34);
-    const shoulderW = Math.round(size * 0.9);
-    const shoulderH = Math.round(size * 0.48);
-    const svg = `
-      <svg xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}' viewBox='0 0 ${size} ${size}'>
-        <rect fill='${bg}' width='${size}' height='${size}' rx='${size/6}'/>
-        <circle cx='${headCx}' cy='${headCy}' r='${headR}' fill='${fg}' />
-        <path d='M ${Math.round((size-shoulderW)/2)} ${Math.round(size*0.78)} a ${Math.round(shoulderW/2)} ${Math.round(shoulderH/2)} 0 1 0 ${shoulderW} 0 z' fill='${fg}' />
-      </svg>`;
-    return `data:image/svg+xml,${encodeURIComponent(svg)}`;
-  };
+  // const silhouetteDataUri = (size = 35) => {
+  //   const bg = "#ececec";
+  //   const fg = "#999";
+  //   const headR = Math.round(size * 0.28);
+  //   const headCx = Math.round(size / 2);
+  //   const headCy = Math.round(size * 0.34);
+  //   const shoulderW = Math.round(size * 0.9);
+  //   const shoulderH = Math.round(size * 0.48);
+  //   const svg = `
+  //     <svg xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}' viewBox='0 0 ${size} ${size}'>
+  //       <rect fill='${bg}' width='${size}' height='${size}' rx='${size/6}'/>
+  //       <circle cx='${headCx}' cy='${headCy}' r='${headR}' fill='${fg}' />
+  //       <path d='M ${Math.round((size-shoulderW)/2)} ${Math.round(size*0.78)} a ${Math.round(shoulderW/2)} ${Math.round(shoulderH/2)} 0 1 0 ${shoulderW} 0 z' fill='${fg}' />
+  //     </svg>`;
+  //   return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+  // };
 
   // ✅ Logout logic
   const handleLogout = () => {
@@ -75,7 +75,7 @@ const Header = ({ username, profilePhoto, onProfileClick }) => {
         >
           {profilePhoto ? (
             <img
-              src={profilePhoto || silhouetteDataUri}
+              src={profilePhoto}
               alt="Profile"
               style={{
                 borderRadius: "50%",
@@ -125,4 +125,5 @@ const Header = ({ username, profilePhoto, onProfileClick }) => {
 };
 
 export default Header;
+
 
