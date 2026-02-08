@@ -10,7 +10,13 @@ const postRoutes = require("./routes/post");
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://mini-social-app-l7xx.vercel.app",
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 // Routes
@@ -26,3 +32,4 @@ mongoose.connect(process.env.MONGO_URI)
     );
   })
   .catch(err => console.log(err));
+
