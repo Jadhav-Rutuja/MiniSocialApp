@@ -41,10 +41,6 @@ const ProfilePage = ({
   };
 
 
-  useEffect(() => {
-  checkFollowing();
-  fetchMyPosts();
-}, [checkFollowing, fetchMyPosts]);
 
 
   // Fetch posts for profile
@@ -70,6 +66,11 @@ const ProfilePage = ({
     }
   };
 
+  useEffect(() => {
+  checkFollowing();
+  fetchMyPosts();
+}, [checkFollowing, fetchMyPosts]);
+  
   // Create new post
   const onCreatePost = async () => {
     if (!profileNewPostText && !profileNewPostImage) return alert("Add text or image");
@@ -178,3 +179,4 @@ const ProfilePage = ({
 };
 
 export default ProfilePage;
+
