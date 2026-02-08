@@ -7,12 +7,14 @@ const SocialPage = () => {
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
+  const [error] = useState("");
   const [commentText, setCommentText] = useState({});
   const [profileNewPostText, setProfileNewPostText] = useState("");
   const [profileNewPostImage, setProfileNewPostImage] = useState("");
   const [userPostsState, setUserPostsState] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [following, setFollowing] = useState(false);
+  const [notifications, setNotifications] = useState([]);
   const [page, setPage] = useState(1);
 
   const token = localStorage.getItem("token");
@@ -44,35 +46,29 @@ const SocialPage = () => {
     return colors[Math.abs(hash) % colors.length];
   };
 
-useEffect(() => {
-
   const fetchUser = async () => {
     try {
-      const res = await API.get("/users/me", {
-        headers: { Authorization: localStorage.getItem("token") }
-      });
+      const res = await API.get("/auth/me", { headers: { Authorization: token } });
       setUser(res.data);
     } catch (err) {
-      console.log("Error fetching user");
+      console.log("Failed to fetch user");
     }
   };
 
-  const fetchPosts = async () => {
+  const fetchPosts = async (pageNum = 1) => {
     try {
-      const res = await API.get("/posts", {
-        headers: { Authorization: localStorage.getItem("token") }
-      });
-      setPosts(res.data);
+      const res = await API.get(`/posts?page=${pageNum}`, { headers: { Authorization: token } });
+      if (pageNum === 1) setPosts(res.data);
+      else setPosts((prev) => [...prev, ...res.data]);
     } catch (err) {
-      console.log("Error fetching posts");
+      console.log("Failed to fetch posts");
     }
   };
-
-  fetchUser();
-  fetchPosts();
-
-}, []);
-
+// eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    fetchUser();
+    fetchPosts();
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -80,6 +76,21 @@ useEffect(() => {
     }
   }, [posts, user]);
 
+  // const handlePost = async () => {
+  //   if (!text && !imageURL) {
+  //     setError("Please add text or image");
+  //     return;
+  //   }
+  //   try {
+  //     await API.post("/posts", { text, imageURL }, { headers: { Authorization: token } });
+  //     setText("");
+  //     setImageURL("");
+  //     setError("");
+  //     fetchPosts();
+  //   } catch (err) {
+  //     setError("Failed to create post");
+  //   }
+  // };
 
   const handleLike = async (postId) => {
     try {
@@ -290,7 +301,3 @@ useEffect(() => {
 };
 
 export default SocialPage;
-
-
-
-
