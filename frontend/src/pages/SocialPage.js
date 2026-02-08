@@ -7,9 +7,6 @@ const SocialPage = () => {
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
-  const [text, setText] = useState("");
-  const [imageURL, setImageURL] = useState("");
-  const [error, setError] = useState("");
   const [commentText, setCommentText] = useState({});
   const [profileNewPostText, setProfileNewPostText] = useState("");
   const [profileNewPostImage, setProfileNewPostImage] = useState("");
@@ -47,29 +44,35 @@ const SocialPage = () => {
     return colors[Math.abs(hash) % colors.length];
   };
 
+useEffect(() => {
+
   const fetchUser = async () => {
     try {
-      const res = await API.get("/auth/me", { headers: { Authorization: token } });
+      const res = await API.get("/users/me", {
+        headers: { Authorization: localStorage.getItem("token") }
+      });
       setUser(res.data);
     } catch (err) {
-      console.log("Failed to fetch user");
+      console.log("Error fetching user");
     }
   };
 
-  const fetchPosts = async (pageNum = 1) => {
+  const fetchPosts = async () => {
     try {
-      const res = await API.get(`/posts?page=${pageNum}`, { headers: { Authorization: token } });
-      if (pageNum === 1) setPosts(res.data);
-      else setPosts((prev) => [...prev, ...res.data]);
+      const res = await API.get("/posts", {
+        headers: { Authorization: localStorage.getItem("token") }
+      });
+      setPosts(res.data);
     } catch (err) {
-      console.log("Failed to fetch posts");
+      console.log("Error fetching posts");
     }
   };
 
-  useEffect(() => {
   fetchUser();
   fetchPosts();
-}, [fetchUser, fetchPosts]);
+
+}, []);
+
 
   useEffect(() => {
     if (user) {
@@ -287,6 +290,7 @@ const SocialPage = () => {
 };
 
 export default SocialPage;
+
 
 
 
