@@ -16,7 +16,6 @@ const SocialPage = () => {
   const [userPostsState, setUserPostsState] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [following, setFollowing] = useState(false);
-  // const [notifications, setNotifications] = useState([]);
   const [page, setPage] = useState(1);
 
   const token = localStorage.getItem("token");
@@ -78,21 +77,6 @@ const SocialPage = () => {
     }
   }, [posts, user]);
 
-  // const handlePost = async () => {
-  //   if (!text && !imageURL) {
-  //     setError("Please add text or image");
-  //     return;
-  //   }
-  //   try {
-  //     await API.post("/posts", { text, imageURL }, { headers: { Authorization: token } });
-  //     setText("");
-  //     setImageURL("");
-  //     setError("");
-  //     fetchPosts();
-  //   } catch (err) {
-  //     setError("Failed to create post");
-  //   }
-  // };
 
   const handleLike = async (postId) => {
     try {
@@ -303,5 +287,6 @@ const SocialPage = () => {
 };
 
 export default SocialPage;
+
 
 
